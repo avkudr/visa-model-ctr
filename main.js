@@ -187,7 +187,7 @@ function init() {
     */
 
     var geometry = new THREE.PlaneGeometry( 32, 32, 5 );
-    var texture = new THREE.TextureLoader().load( '../models/calib_target.png' );
+    var texture = new THREE.TextureLoader().load( './models/calib_target.png' );
     var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, map: texture} );
     var calibTarget = new THREE.Mesh( geometry, material );
     calibTarget.rotation.y = Math.PI / 2;
