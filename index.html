@@ -2,12 +2,13 @@
 <html lang="en">
 	<head>
 		<title>Concentric Tube Robot</title>
-		<link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
 			body {
-				font-family: Monospace;
+				font-family: Verdana, Monospace;
+				font-size: 12px;
 				background-color: #222;
 				margin: 0px;
 				overflow: hidden;
@@ -30,14 +31,25 @@
 		<script src="3rdparty/three.min.js"></script>
 		<script src="3rdparty/TrackballControls.js"></script>
 		<script src='3rdparty/dat.gui.min.js'></script>
-		<script src='3rdparty/STLLoader.js'></script>
+		<script src='3rdparty/MTLLoader.js'></script>
+		<script src='3rdparty/OBJLoader.js'></script>
 		<!-- <script src="3rdparty/TransformControls.js"></script> -->
 
 		<script src="tube.js"></script>
 		<script src="rtc.js"></script>
 		<script src="main.js"></script>
-		<div style="position: absolute; top: 10px; left: 10px; color: rgb(255, 255, 255);">Simulator of Concentric Tube Robot</div>
-		<div style="position: absolute; bottom: 10px; left: 10px; color: rgb(255, 255, 255);">Copyright 2017 &copy; Andrey Kudryavtsev</div>
+		<div style="position: absolute; top: 10px; left: 10px; color: rgb(255, 255, 255);">
+			Simulator of Concentric Tube Robot<br><br>
+			Click on 'A' to show/hide the axes<br>
+			Click on 'C' to show/hide camera frustrum<br>
+			Use sliders to change robot configuration<br>
+			Use mouse wheel on sliders to move smoothly<br>
+			Click 'Camera view' to show image from robot camera<br><br>
+			For more details see this <a href="http://ieeexplore.ieee.org/document/8294208/">RAL article</a><br>
+			<a href="https://github.com/avkudr/visa-model-ctr">Source code</a>
+
+		</div>
+		<div style="position: absolute; bottom: 10px; left: 10px; color: rgb(255, 255, 255);">Andrey Kudryavtsev &copy; 2018</div>
 		
 	</body>
 

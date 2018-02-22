@@ -13,7 +13,7 @@ var Tube = class {
 
             this.updateBevelObject();
             //spline
-            this.nbPtsSpline = 20;
+            this.nbPtsSpline = 10;
             var geometry = this.getGeometry();
             //createMesh
             this.material = new THREE.MeshLambertMaterial({ color: this.color, wireframe: false });
@@ -91,8 +91,9 @@ var Tube = class {
             this.spline = new THREE.CatmullRomCurve3(splinePts);
 
             this.extrudeSettings = {
-                steps: 100,
-                bevelEnabled: false,
+                steps: 20,
+                amount: 16,
+                bevelEnabled: true,
                 extrudePath: this.spline
             };
     

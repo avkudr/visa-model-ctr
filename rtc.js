@@ -36,7 +36,7 @@ var ConcentricTubeRobot = class {
         }
 
         // Fabrication parameters of tubes
-        this.tubeKappa  = [4.91,7.2,9.76]; // 1/m - circular precurvatures
+        this.tubeKappa  = [0.41,7.2,9.76]; // 1/m - circular precurvatures
         this.tubeLength = [120e-3,155e-3,200e-3]; // m - lengths of curved parts
     }
 
@@ -44,9 +44,23 @@ var ConcentricTubeRobot = class {
         this.alpha1 = q[0];
         this.alpha2 = q[1];
         this.alpha3 = q[2];
-        this.rho1   = q[3];
-        this.rho2   = q[4];
-        this.rho3   = q[5];
+
+        var L1 = this.tubeLength[0] + q[3];        
+        var L2 = this.tubeLength[1] + q[4] - L1;        
+        var L3 = this.tubeLength[2] + q[5] - L2 - L1;        
+
+        if (L1 >= 0 && L2 >= 0 && L3 >= 0){
+            this.rho1   = q[3];
+            this.rho2   = q[4];
+            this.rho3   = q[5];
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    getJointPos(){
+        return [this.alpha1,this.alpha2,this.alpha3,this.rho1,this.rho2,this.rho3];
     }
 
     getToolTransform(){

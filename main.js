@@ -7,6 +7,7 @@ var robot;
 var frames;
 var windowManager;
 var subWindow;
+var modelObj;
 
 var gui = new dat.GUI();
 var FabricationParams = function () {
@@ -33,29 +34,30 @@ window.onload = function () {
     var pars = new FabricationParams();
     var dofs = new DOFs();
     
-    var f1 = gui.addFolder('Fabrication parameters');
-    f1.add(pars, 'length1', 50, 250);
-    f1.add(pars, 'length2', 50, 250);
-    f1.add(pars, 'length3', 50, 250);
-    f1.add(pars, 'curvRadius1', 0, 0.05);
-    f1.add(pars, 'curvRadius2', 0, 0.05);
-    f1.add(pars, 'curvRadius3', 0, 0.05);
+    // var f1 = gui.addFolder('Fabrication parameters');
+    // f1.add(pars, 'length1', 50, 250);
+    // f1.add(pars, 'length2', 50, 250);
+    // f1.add(pars, 'length3', 50, 250);
+    // f1.add(pars, 'curvRadius1', 0, 0.05);
+    // f1.add(pars, 'curvRadius2', 0, 0.05);
+    // f1.add(pars, 'curvRadius3', 0, 0.05);
 
     var f2 = gui.addFolder('Joint values');
-    f2.add(dofs, 'translation1', 0, 200);
-    f2.add(dofs, 'translation2', -200, 200);
-    f2.add(dofs, 'translation3', -200, 200);
+    f2.add(dofs, 'translation1', -200, 200).step(0.2);
+    f2.add(dofs, 'translation2', -200, 200).step(0.2);
+    f2.add(dofs, 'translation3', -200, 200).step(0.2);
     f2.add(dofs, 'rotation1', -180, 180);
     f2.add(dofs, 'rotation2', -180, 180);
     f2.add(dofs, 'rotation3', -180, 180);
     f2.open();
 
     //on changing parameters of the first folder f1
-    for (var i in f1.__controllers) {
-        f1.__controllers[i].onChange(function(value) {
-            updateScene('fabrication', this);
-        });
-    }
+    // for (var i in f1.__controllers) {
+    //     f1.__controllers[i].onChange(function(value) {
+    //         updateScene('fabrication', this);
+    //     });
+    // }
+
     //on changing parameters of the second folder f2
     for (var i in f2.__controllers) {
         f2.__controllers[i].onChange(function(value) {
@@ -86,8 +88,26 @@ window.onload = function () {
             subWindow.document.body.appendChild(renderer2.domElement);
         }
     }};
-    gui.add(obj,'add').name("Show robot camera view");
+    gui.add(obj,'add').name("Camera view");
 };
+
+function setGUIMinMax(idx, min, max) {
+    var properties = gui.__folders['Joint values'].__controllers[idx];
+    var keys = Object.keys(properties.object)
+    var value = properties.object[keys[idx]]; 
+
+    if (min == null) min = properties.__min;
+    if (max == null) max = properties.__max;
+    if (min > max){
+        console.error("Min is greater than max in setGUIMinMax");
+        return;
+    }
+    if (value > max) properties.object[keys[idx]] = max;
+    if (value < min) properties.object[keys[idx]] = min;
+    properties.__min = min;
+    properties.__max = max;
+    properties.updateDisplay();
+}
 
 function updateScene(type, pars) {
 
@@ -95,13 +115,14 @@ function updateScene(type, pars) {
         
     if (type == 'fabrication'){
         robot.tubes[0].setLength    (pars.object.length1);
-        robot.tubes[0].setCurvature(pars.object.curvRadius1);
+        robot.tubes[0].setCurvature (pars.object.curvRadius1);
         robot.tubes[1].setLength    (pars.object.length2);
-        robot.tubes[1].setCurvature(pars.object.curvRadius2);
+        robot.tubes[1].setCurvature (pars.object.curvRadius2);
         robot.tubes[2].setLength    (pars.object.length3);
-        robot.tubes[2].setCurvature(pars.object.curvRadius3);
+        robot.tubes[2].setCurvature (pars.object.curvRadius3);
     } else {
-        var q = new Array(6);
+        let q = new Array(6);
+        let statusOK;
         q[0] = pars.object.rotation1 / 180.0 * Math.PI;
         q[1] = pars.object.rotation2 / 180.0 * Math.PI;
         q[2] = pars.object.rotation3 / 180.0 * Math.PI;
@@ -109,7 +130,14 @@ function updateScene(type, pars) {
         q[4] = pars.object.translation2 / 1000;
         q[5] = pars.object.translation3 / 1000;
 
-        robot.setJointPos(q);
+        statusOK = robot.setJointPos(q);
+        if (!statusOK) {
+            q = robot.getJointPos();
+            pars.object.translation1 = q[3] * 1000;
+            pars.object.translation2 = q[4] * 1000;
+            pars.object.translation3 = q[5] * 1000;
+            gui.updateDisplay();
+        }
     } 
 
     robot.updateAll();
@@ -179,15 +207,29 @@ function init() {
     scene.add( cameraHelper );
 
     /*
-    var loader = new THREE.STLLoader();
-    loader.load( './models/EiffelTower_fixed.stl', function ( geometry ) {
-        var material=new THREE.MeshLambertMaterial({ ambient: 0xFBB917,color: 0x3333aa });
-        scene.add( new THREE.Mesh( geometry, material ) );
+    // model
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath( '../models/' );
+    mtlLoader.load( 'tinker.mtl', function( materials ) {
+        materials.preload();
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath( '../models/' );
+        objLoader.load( 'tinker.obj', function ( object ) {       
+            modelObj = object.clone();
+            modelObj.rotation.y = -Math.PI * 4 / 4; 
+            modelObj.position.x = 80;
+            modelObj.position.y = -10;
+            modelObj.position.z = 70;
+            modelObj.scale.set(70,70,70);
+            modelObj.visible = false;
+            scene.add( modelObj );
+        });
     });
     */
 
     var geometry = new THREE.PlaneGeometry( 32, 32, 5 );
-    var texture = new THREE.TextureLoader().load( './models/calib_target.png' );
+    var texture = new THREE.TextureLoader().load( 'models/calib_target.png' );
     var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, map: texture} );
     var calibTarget = new THREE.Mesh( geometry, material );
     calibTarget.rotation.y = Math.PI / 2;
@@ -195,14 +237,6 @@ function init() {
     calibTarget.position.y = 0;
     calibTarget.position.z = 175;
     scene.add( calibTarget );
-
-    /*
-    controlTransform = new THREE.TransformControls( cameraExt, renderer.domElement );
-    controlTransform.addEventListener( 'change', animate );
-    controlTransform.attach( calibTarget );
-    scene.add( controlTransform );
-    */
-    
 
     robot.updateAll();   
     updateCameraOnRobot();
@@ -223,33 +257,44 @@ function animate() {
     }
 }
 
+function saveImage(filePrefix){
+    try {
+        imgData = renderer2.domElement.toDataURL();      
+    } 
+    catch(e) {
+        console.log("Browser does not support taking screenshot of 3d context");
+        return;
+    }
+    console.log(imgData);
+
+    var link = document.createElement("a");
+
+    link.setAttribute("href", imgData);
+    link.setAttribute("download", filePrefix + ".png" );
+    link.click();
+}
 
 window.addEventListener("keyup", function(e){
     var imgData, imgNode;
     
     if(e.which === 80){ //Listen to 'P' key
-        try {
-            imgData = renderer2.domElement.toDataURL();      
-        } 
-        catch(e) {
-            console.log("Browser does not support taking screenshot of 3d context");
-            return;
-        }
-        console.log(imgData);
-
-        var link = document.createElement("a");
-    
-        link.setAttribute("href", imgData);
-        link.setAttribute("download", "vst-screenshot.png");
-        link.click();
-    }else if (e.which === 65){ // 'a' key
+        saveImage('vst-screenshot');
+    }else if (e.which === 65){ // 'a' key - show axis
         robot.toggleDisplayFrames();
-    }else if (e.which === 67){ // 'c' key
+    }else if (e.which === 67){ // 'c' key - show camera frustrum
         cameraHelper.visible = ! cameraHelper.visible;
+    }else if (e.which === 84){ // 't' key - show 3D object
+        modelObj.visible = ! modelObj.visible;
     }
 });
 
+window.addEventListener( 'resize', onWindowResize, false );
+function onWindowResize(){
+    cameraExt.aspect = window.innerWidth / window.innerHeight;
+    cameraExt.updateProjectionMatrix();
 
+    renderer.setSize( window.innerWidth, window.innerHeight );
+}
 
 
 
