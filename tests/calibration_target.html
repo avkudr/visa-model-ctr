@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title></title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <!-- <div id="info">
+    "W" translate | "E" rotate | "R" scale | "+" increase size | "-" decrease size<br />
+    Press "Q" to toggle world/local space, keep "Ctrl" down to snap to grid
+  </div> -->
+  <script src="../3rdparty/three.js"></script>
+  <script src="../3rdparty/TrackballControls.js"></script>
+  <!-- <script src="../3rdparty/TransformControls.js"></script> -->
+  <script>
+
+    // Create a WebGL renderer, camera
+    
+    const scene = new THREE.Scene();
+
+    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+    camera.position.set(0, 100, 500);
+    scene.add(camera);
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // controlling camera position with mouse
+    controls = new THREE.TrackballControls(camera, renderer.domElement);
+    controls.minDistance = 200;
+    controls.maxDistance = 1000;
+
+    // create a point light
+    const pointLight = new THREE.PointLight(0xFFFFFF);
+    pointLight.position.x = 10;
+    pointLight.position.y = 50;
+    pointLight.position.z = 130;
+    scene.add(pointLight);
+
+    // background grid
+    scene.add(new THREE.GridHelper(120, 20));
+
+    // add calibration target
+    var geometry = new THREE.PlaneGeometry( 200, 200, 5 );
+    var texture = new THREE.TextureLoader().load( '../models/calib_target.png' );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide, map: texture} );
+    var calibTarget = new THREE.Mesh( geometry, material );
+    scene.add( calibTarget );
+
+    // controlTransform = new THREE.TransformControls( camera, renderer.domElement );
+    // controlTransform.addEventListener( 'change', update );
+    // controlTransform.attach( calibTarget );
+    // scene.add( controlTransform );
+
+    function update () {
+      controls.update();
+      // controlTransform.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(update);
+    }
+    
+    requestAnimationFrame(update);
+  </script>
+</body>
+</html>

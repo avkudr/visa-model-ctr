@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Concentric Tube Robot</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #222;
+				margin: 0px;
+				overflow: hidden;
+			}
+			a {
+				color: #f80;
+			}
+            #slider{
+            writing-mode: bt-lr; /* IE */
+            -webkit-appearance: slider-vertical; /* WebKit */
+            }
+		</style>
+	</head>
+
+	<body>
+
+		<!-- sudo python3 -m http.server 80 -->
+
+		<!-- <script src="3rdparty/three.js"></script> -->
+		<script src="3rdparty/three.min.js"></script>
+		<script src="3rdparty/TrackballControls.js"></script>
+		<script src='3rdparty/dat.gui.min.js'></script>
+		<script src='3rdparty/STLLoader.js'></script>
+		<!-- <script src="3rdparty/TransformControls.js"></script> -->
+
+		<script src="tube.js"></script>
+		<script src="rtc.js"></script>
+		<script src="main.js"></script>
+		<div style="position: absolute; top: 10px; left: 10px; color: rgb(255, 255, 255);">Simulator of Concentric Tube Robot</div>
+		<div style="position: absolute; bottom: 10px; left: 10px; color: rgb(255, 255, 255);">Copyright 2017 &copy; Andrey Kudryavtsev</div>
+		
+	</body>
+
+</html>
