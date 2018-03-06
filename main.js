@@ -26,7 +26,7 @@ var onControlPanelChange = function(pars) {
     updateCameraOnRobot();
 }
 
-var ctrlPanel = new ControlPanel(document.body, cameraViewContainer.id, onControlPanelChange);
+var ctrlPanel; 
 
 // =============================================================================
 // MAIN PART
@@ -71,6 +71,7 @@ function init() {
     cameraViewContainer.innerHTML = '<ol>View of the camera on the robot tip</ol>';
     document.body.appendChild(cameraViewContainer);
 
+    ctrlPanel = new ControlPanel(document.body, cameraViewContainer.id, onControlPanelChange);
     // general configuration of the scene
     scene = new THREE.Scene();
 
