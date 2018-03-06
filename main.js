@@ -211,8 +211,8 @@ window.addEventListener("keyup", function(e){
 
 window.addEventListener( 'resize', onWindowResize, false );
 function onWindowResize(){
-    cameraExt.aspect = window.offsetWidth / window.offsetHeight;
+    cameraExt.aspect = window.innerWidth / window.innerHeight;
     cameraExt.updateProjectionMatrix();
 
-    rendererExt.setSize( window.offsetWidth, window.offsetHeight );
+    rendererExt.setSize( window.innerWidth, window.innerHeight );
 }

@@ -49,7 +49,7 @@ var ControlPanel = function(sceneContainer,externalViewCanvasId,onControlPanelCh
     //show/hide camera view
     var obj = { add:function(){ 
         let div = document.getElementById(externalViewCanvasId);
-        if (div.style.visibility=="hidden") div.style.visibility = "visible";
+        if (div.style.visibility == "hidden") div.style.visibility = "visible";
         else div.style.visibility = "hidden";
     }};
     this.canvas.add(obj,'add').name("Show-hide camera");
