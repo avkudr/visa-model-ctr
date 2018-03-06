@@ -1,10 +1,10 @@
 var ConcentricTubeRobot = class {
     constructor() {
         //default joint values:
-        this.alpha1 = 0;
+        this.alpha1 = 0; //radians
         this.alpha2 = 0;
         this.alpha3 = 0;
-        this.rho1 = 0;
+        this.rho1 = 0; // m
         this.rho2 = 0;
         this.rho3 = 0;
 
@@ -37,7 +37,7 @@ var ConcentricTubeRobot = class {
 
         // Fabrication parameters of tubes
         this.tubeKappa  = [0.41,7.2,9.76]; // 1/m - circular precurvatures
-        this.tubeLength = [120e-3,155e-3,200e-3]; // m - lengths of curved parts
+        this.tubeLength = [40e-3,155e-3,200e-3]; // m - lengths of curved parts
     }
 
     setJointPos(q){
@@ -53,9 +53,9 @@ var ConcentricTubeRobot = class {
             this.rho1   = q[3];
             this.rho2   = q[4];
             this.rho3   = q[5];
-            return 1;
+            return 'OK';
         } else {
-            return 0;
+            return 'ERROR';
         }
     }
 
@@ -71,9 +71,12 @@ var ConcentricTubeRobot = class {
       
         // add tubes
         this.tubes = new Array(3);
-        for (var i = 0; i < this.tubes.length; i++){
-            this.tubes[i] = new Tube();
-        }
+        // for (var i = 0; i < this.tubes.length; i++){
+        //     this.tubes[i] = new Tube.Tube();
+        // }
+        this.tubes[0] = new Tube(0.1,10,0,2,0xff5000);
+        this.tubes[1] = new Tube(0.1,10,0,2,0xff6000);
+        this.tubes[2] = new Tube(0.1,10,0,2,0xff8000);
 
         this.tubes[0].setLength   (this.L[0]        * 1);
         this.tubes[0].setRadius   (this.radiiExt[0] * 1);
@@ -193,15 +196,15 @@ var ConcentricTubeRobot = class {
         this.axisT3.visible = ! this.axisT3.visible;
     }
     initJointFrames(){
-        this.axisT1 = new THREE.AxesHelper(30/1000);
+        this.axisT1 = new THREE.AxisHelper(30/1000);
         this.axisT1.matrixAutoUpdate = false;
         this.axisT1.visible = false;
         this.mesh.add(this.axisT1);
-        this.axisT2 = new THREE.AxesHelper(30/1000);
+        this.axisT2 = new THREE.AxisHelper(30/1000);
         this.axisT2.matrixAutoUpdate = false;
         this.axisT2.visible = false;
         this.mesh.add(this.axisT2);
-        this.axisT3 = new THREE.AxesHelper(30/1000);
+        this.axisT3 = new THREE.AxisHelper(30/1000);
         this.axisT3.matrixAutoUpdate = false;
         this.axisT3.visible = false;
         this.mesh.add(this.axisT3);

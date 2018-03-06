@@ -9,17 +9,26 @@
 			body {
 				font-family: Verdana, Monospace;
 				font-size: 12px;
-				background-color: #222;
-				margin: 0px;
+				background: #444444;
+				margin: 0;
+				padding: 0;
 				overflow: hidden;
 			}
 			a {
 				color: #f80;
 			}
             #slider{
-            writing-mode: bt-lr; /* IE */
-            -webkit-appearance: slider-vertical; /* WebKit */
+            	writing-mode: bt-lr; /* IE */
+            	-webkit-appearance: slider-vertical; /* WebKit */
             }
+			ol{
+				font-style: italic;
+				color: #bbb;
+				margin: 0;
+				padding-left: 10px;
+				height: 15px;
+				background-color: transparent;
+			}
 		</style>
 	</head>
 
@@ -35,11 +44,12 @@
 		<script src='3rdparty/OBJLoader.js'></script>
 		<!-- <script src="3rdparty/TransformControls.js"></script> -->
 
+		<script src="control_panel.js"></script>
 		<script src="tube.js"></script>
 		<script src="rtc.js"></script>
 		<script src="main.js"></script>
 		<div style="position: absolute; top: 10px; left: 10px; color: rgb(255, 255, 255);">
-			Simulator of Concentric Tube Robot<br><br>
+			SIMULATOR OF CONCENTRIC TUBE ROBOT<br><br>
 			Click on 'A' to show/hide the axes<br>
 			Click on 'C' to show/hide camera frustrum<br>
 			Use sliders to change robot configuration<br>
@@ -49,7 +59,7 @@
 			<a href="https://github.com/avkudr/visa-model-ctr">Source code</a>
 
 		</div>
-		<div style="position: absolute; bottom: 10px; left: 10px; color: rgb(255, 255, 255);">Andrey Kudryavtsev &copy; 2018</div>
+		<div style="position: absolute; bottom: 10px; right: 10px; color: rgb(255, 255, 255);">Andrey Kudryavtsev &copy; 2018</div>
 		
 	</body>
 
