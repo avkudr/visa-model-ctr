@@ -8,6 +8,12 @@ var ConcentricTubeRobot = class {
         this.rho2 = 0;
         this.rho3 = 0;
 
+        // robot kinematics
+        this.T = new Array(3);
+        this.T[0] = new THREE.Matrix4;
+        this.T[1] = new THREE.Matrix4;
+        this.T[2] = new THREE.Matrix4;
+
         this.initFabricationParams();
         this.updateRobotKinematics();
         this.create3Dmodel(); //create3Dmodel
@@ -156,9 +162,8 @@ var ConcentricTubeRobot = class {
 
         //console.log(this.L);
         // Transformation matrices
-        this.T = new Array(3);
+        
         for(var i = 0; i < this.T.length; i++){
-            this.T[i] = new THREE.Matrix4;
             this.T[i].set (            Math.cos(this.P[i])*Math.cos(this.K[i]*this.L[i]), 
                  -Math.sin(this.P[i]), Math.cos(this.P[i])*Math.sin(this.K[i]*this.L[i]), 
                          Math.cos(this.P[i])*(1-Math.cos(this.K[i]*this.L[i]))/this.K[i],
